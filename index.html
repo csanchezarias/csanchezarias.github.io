@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carlos Sánchez Arias — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #fafaf8;
+  --bg-secondary: #f3f2ee;
+  --text: #1a1a18;
+  --text-secondary: #6b6b65;
+  --text-tertiary: #a0a09a;
+  --border: rgba(0,0,0,0.09);
+  --border-hover: rgba(0,0,0,0.18);
+  --white: #ffffff;
+  --sidebar-w: 210px;
+  --accent: #3a5a3a;
+  --accent-bg: #edf4ed;
+  --accent-2: #3a4a6a;
+  --accent-2-bg: #eceef5;
+  --accent-3: #6a3a3a;
+  --accent-3-bg: #f5ecec;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141412;
+    --bg-secondary: #1e1e1b;
+    --text: #f0efe8;
+    --text-secondary: #9a9a92;
+    --text-tertiary: #6a6a62;
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.2);
+    --white: #1c1c1a;
+    --accent-bg: #1e2b1e;
+    --accent-2-bg: #1e2030;
+    --accent-3-bg: #2b1e1e;
+  }
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  min-height: 100vh;
+}
+h1, h2, h3 { font-family: 'DM Serif Display', serif; font-weight: 400; }
+
+/* SIDEBAR */
+.sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  border-right: 0.5px solid var(--border);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  overflow-y: auto;
+}
+.sidebar-logo { display: flex; align-items: center; gap: 10px; }
+.sidebar-dot { width: 8px; height: 8px; background: var(--text); border-radius: 50%; flex-shrink: 0; }
+.sidebar-name { font-size: 13px; font-weight: 500; color: var(--text); }
+
+.sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+.sidebar-nav-label {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 4px;
+  margin-top: 1.25rem;
+}
+.sidebar-nav-label:first-child { margin-top: 0; }
+.sidebar-link {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 5px 8px;
+  border-radius: 6px;
+  transition: background 0.12s, color 0.12s;
+  display: block;
+}
+.sidebar-link:hover { background: var(--bg-secondary); color: var(--text); }
+.sidebar-link.active { color: var(--text); background: var(--bg-secondary); font-weight: 500; }
+
+.sidebar-footer { margin-top: auto; display: flex; flex-direction: column; gap: 6px; }
+.sidebar-contact { font-size: 11.5px; color: var(--text-tertiary); text-decoration: none; transition: color 0.12s; }
+.sidebar-contact:hover { color: var(--text); }
+
+/* MAIN */
+.main { flex: 1; min-width: 0; padding: 3rem 3.5rem 5rem; }
+
+/* HERO */
+.hero { margin-bottom: 3.5rem; }
+.hero-eyebrow { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 1rem; }
+.hero h1 { font-size: clamp(2rem, 3.5vw, 2.8rem); line-height: 1.15; margin-bottom: 1.1rem; }
+.hero h1 em { font-style: italic; color: var(--text-secondary); }
+.hero-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.75; max-width: 540px; }
+
+/* SECTION */
+.section { margin-bottom: 4rem; }
+.section-label {
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-tertiary); margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem; border-bottom: 0.5px solid var(--border);
+}
+
+/* FLIP CARD GRID */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.flip-wrapper {
+  height: 380px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+.flip-wrapper:focus { outline: none; }
+
+.flip-inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+  border-radius: 12px;
+}
+.flip-wrapper.flipped .flip-inner { transform: rotateY(180deg); }
+
+.flip-front, .flip-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 12px;
+  border: 0.5px solid var(--border);
+  background: var(--white);
+}
+.flip-front { overflow: hidden; }
+.flip-back { overflow-y: auto; }
+.flip-front { transition: border-color 0.15s, box-shadow 0.2s; }
+.flip-wrapper:hover .flip-front { border-color: var(--border-hover); box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+.flip-back { transform: rotateY(180deg); padding: 1.75rem; display: flex; flex-direction: column; justify-content: flex-start; gap: 1rem; overscroll-behavior: contain; }
+
+/* FRONT */
+.project-image {
+  width: 100%; height: 210px; object-fit: cover; object-position: center center; display: block;
+  transition: transform 0.4s ease;
+  background: var(--bg-secondary);
+}
+.flip-wrapper:hover .project-image { transform: scale(1.03); }
+.project-image-placeholder {
+  width: 100%; height: 210px;
+  background: var(--bg-secondary);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.project-front-body { padding: 1rem 1.25rem 1.2rem; }
+.project-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.4rem; }
+.project-title { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--text); line-height: 1.2; }
+
+.project-badge {
+  font-size: 10px; padding: 2px 8px; border-radius: 20px;
+  white-space: nowrap; flex-shrink: 0;
+  font-weight: 500; letter-spacing: 0.02em;
+}
+.badge-green { background: var(--accent-bg); color: var(--accent); border: 0.5px solid rgba(58,90,58,0.2); }
+.badge-blue { background: var(--accent-2-bg); color: var(--accent-2); border: 0.5px solid rgba(58,74,106,0.2); }
+.badge-red { background: var(--accent-3-bg); color: var(--accent-3); border: 0.5px solid rgba(106,58,58,0.2); }
+.badge-gray { background: var(--bg-secondary); color: var(--text-secondary); border: 0.5px solid var(--border); }
+
+.project-desc-short { font-size: 12.5px; color: var(--text-secondary); line-height: 1.55; }
+.project-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 0.75rem; }
+.tag { font-size: 10px; padding: 3px 8px; border-radius: 20px; background: var(--bg-secondary); color: var(--text-secondary); }
+
+.flip-hint { font-size: 10px; color: var(--text-tertiary); margin-top: 0.6rem; display: flex; align-items: center; gap: 4px; }
+.flip-hint::before { content: '↻'; font-size: 12px; }
+
+/* BACK */
+.flip-back-title { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--text); margin-bottom: 0.75rem; }
+.flip-back-desc { font-size: 13.5px; color: var(--text-secondary); line-height: 1.7; flex: 1; }
+.flip-back-footer { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.flip-back-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.flip-back-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.back-btn {
+  font-size: 12px; padding: 7px 14px; border-radius: 7px;
+  border: 0.5px solid var(--border-hover); background: transparent;
+  color: var(--text); text-decoration: none; cursor: pointer;
+  transition: background 0.12s; display: inline-block;
+  font-family: 'DM Sans', sans-serif;
+}
+.back-btn:hover { background: var(--bg-secondary); }
+.back-btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+.back-btn.primary:hover { opacity: 0.85; }
+.close-btn {
+  font-size: 11px; color: var(--text-tertiary); background: none; border: none;
+  cursor: pointer; padding: 0; font-family: 'DM Sans', sans-serif;
+  transition: color 0.12s; align-self: flex-start;
+}
+.close-btn:hover { color: var(--text); }
+
+/* SKILLS */
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.75rem; }
+.skill-block { background: var(--white); border: 0.5px solid var(--border); border-radius: 8px; padding: 1rem 1.1rem; transition: border-color 0.12s; }
+.skill-block:hover { border-color: var(--border-hover); }
+.skill-category { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 0.6rem; }
+.skill-list { display: flex; flex-direction: column; gap: 4px; }
+.skill-item { font-size: 12.5px; color: var(--text-secondary); }
+
+/* ABOUT */
+.about-card { background: var(--white); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.75rem; max-width: 580px; }
+.about-card p { font-size: 15px; color: var(--text-secondary); line-height: 1.75; }
+.about-card p + p { margin-top: 1rem; }
+
+/* CONTACT */
+.contact-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.contact-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-family: 'DM Sans', sans-serif;
+  padding: 10px 20px; border-radius: 8px;
+  border: 0.5px solid var(--border-hover); background: transparent;
+  color: var(--text); cursor: pointer; text-decoration: none;
+  transition: background 0.15s; letter-spacing: 0.02em;
+}
+.contact-btn:hover { background: var(--bg-secondary); }
+.contact-btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+.contact-btn.primary:hover { opacity: 0.85; }
+
+/* LIGHTBOX */
+.lightbox-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,0.85);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s;
+}
+.lightbox-overlay.open { opacity: 1; pointer-events: all; }
+.lightbox-inner { position: relative; width: 92vw; max-width: 1200px; height: 88vh; display: flex; align-items: center; justify-content: center; }
+.lightbox-img { max-width: 100%; max-height: 100%; border-radius: 8px; display: block; object-fit: contain; }
+.lightbox-close {
+  position: absolute; top: -36px; right: 0;
+  background: none; border: none; color: white;
+  font-size: 24px; cursor: pointer; line-height: 1;
+}
+.lightbox-fullscreen {
+  position: absolute; top: -36px; right: 36px;
+  background: none; border: none; color: white;
+  font-size: 22px; cursor: pointer; line-height: 1;
+}
+.lightbox-prev, .lightbox-next {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,0.15); border: none; color: white;
+  font-size: 20px; padding: 12px 16px; cursor: pointer;
+  border-radius: 6px; transition: background 0.15s;
+}
+.lightbox-prev { left: -56px; }
+.lightbox-next { right: -56px; }
+.lightbox-prev:hover, .lightbox-next:hover { background: rgba(255,255,255,0.3); }
+.lightbox-counter { text-align: center; color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 10px; }
+footer { padding-top: 2rem; border-top: 0.5px solid var(--border); }
+footer p { font-size: 12px; color: var(--text-tertiary); }
+
+/* MOBILE */
+@media (max-width: 768px) {
+  body { flex-direction: column; }
+  .sidebar { width: 100%; height: auto; position: relative; flex-direction: row; align-items: center; padding: 1rem 1.5rem; gap: 1rem; overflow-x: auto; border-right: none; border-bottom: 0.5px solid var(--border); }
+  .sidebar-nav { flex-direction: row; flex-wrap: wrap; gap: 3px; }
+  .sidebar-nav-label { display: none; }
+  .sidebar-footer { display: none; }
+  .main { padding: 2rem 1.25rem 4rem; }
+  .projects-grid { grid-template-columns: 1fr 1fr; }
+  .flip-wrapper { height: 320px; }
+}
+@media (max-width: 480px) {
+  .projects-grid { grid-template-columns: 1fr; }
+}
+.section { scroll-margin-top: 2rem; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-dot"></div>
+    <span class="sidebar-name">Carlos Sánchez</span>
+  </div>
+  <nav class="sidebar-nav">
+    <span class="sidebar-nav-label">Navegación</span>
+    <a class="sidebar-link" href="#projects">Proyectos</a>
+    <a class="sidebar-link" href="#skills">Skills</a>
+    <a class="sidebar-link" href="#about">Sobre mí</a>
+    <a class="sidebar-link" href="#contact">Contacto</a>
+    <span class="sidebar-nav-label">Proyectos</span>
+    <a class="sidebar-link" href="#mapa">Mapa Interactivo</a>
+    <a class="sidebar-link" href="#chatbots">Chatbots</a>
+    <a class="sidebar-link" href="#triviapro">TriviaPro</a>
+    <a class="sidebar-link" href="#suno">Suno Pipeline</a>
+    <a class="sidebar-link" href="#docanalyzer">DocAnalyzer</a>
+    <a class="sidebar-link" href="#competetrack">CompeteTrack</a>
+    <a class="sidebar-link" href="#alphatracker">AlphaTracker</a>
+    <a class="sidebar-link" href="#appdevis">Devis & Factures</a>
+    <a class="sidebar-link" href="#englishflow">EnglishFlow</a>
+    <a class="sidebar-link" href="#poketoolmmo">PokeToolMMO</a>
+    <a class="sidebar-link" href="#traductovoz">Traductor Voz</a>
+    <a class="sidebar-link" href="#librogenerator">AI Book Generator</a>
+    <a class="sidebar-link" href="#agenteautonomo">Agente Autónomo</a>
+    <a class="sidebar-link" href="#ocraxiom">OCR Axiom</a>
+    <a class="sidebar-link" href="#alchemymerge">Alchemy Merge</a>
+    <a class="sidebar-link" href="#quizshow">QuizShow</a>
+  </nav>
+  <div class="sidebar-footer">
+    <a class="sidebar-contact" href="mailto:csanchezarias86@gmail.com">csanchezarias86@gmail.com</a>
+    <a class="sidebar-contact" href="https://github.com/csanchezarias" target="_blank">github.com/csanchezarias</a>
+    <a class="sidebar-contact" href="https://linkedin.com/in/carlos-sanchez-arias" target="_blank">LinkedIn</a>
+  </div>
+</aside>
+
+<main class="main">
+
+  <section class="hero">
+    <p class="hero-eyebrow">Automatización · IA · Pipelines</p>
+    <h1>Construyo sistemas<br>que <em>trabajan solos.</em></h1>
+    <p class="hero-desc">Desarrollo pipelines de automatización e integración de IA para generación de contenido, análisis de documentos y monitorización de competidores.</p>
+  </section>
+
+  <section class="section" id="projects">
+    <p class="section-label">Proyectos</p>
+    <div class="projects-grid">
+
+      <!-- MAPA INTERACTIVO -->
+      <div class="flip-wrapper" id="mapa" tabindex="0" onclick="toggleFlip(this)" onkeydown="if(event.key==='Enter')toggleFlip(this)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img class="project-image" src="images/map2.png" alt="Mapa Interactivo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="project-image-placeholder">mapa_interactivo.png</div>
+            <div class="project-front-body">
+              <div class="project-top">
+                <span class="project-title">Mapa Interactivo</span>
+                <span class="project-badge badge-green">Frontend</span>
+              </div>
+              <p class="project-desc-short">Mapa web interactivo desplegado en producción. HTML, CSS y JavaScript puro.</p>
+              <div class="project-tags">
+                <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JS</span><span class="tag">Netlify</span>
+              </div>
+              <p class="flip-hint">Click para más info</p>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div>
+              <p class="flip-back-title">Mapa Interactivo</p>
+              <p class="flip-back-desc">Mapa web interactivo desplegado en producción en Netlify. Construido con HTML, CSS y JavaScript puro sin ninguna dependencia externa. Diseño limpio y responsivo con múltiples capas de información.</p>
+            </div>
+            <div class="flip-back-footer">
+              <div class="flip-back-tags">
+                <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">Netlify</span>
+              </div>
+              <div class="flip-back-actions">
+                <a class="back-btn primary" href="https://interactivemp.netlify.app/" target="_blank">Ver en vivo →</a>
+                <button class="back-btn" onclick="event.stopPropagation();openLightbox(['images/map1.png','images/map2.png','images/map3.png'],0)">Ver fotos</button>
+                <button class="back-btn" onclick="event.stopPropagation();openVideo('videos/interactive_map.mp4')">Ver vídeo</button>
+                <button class="close-btn" onclick="event.stopPropagation();toggleFlip(this.closest('.flip-wrapper'))">← Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHATBOTS -->
+      <div class="flip-wrapper" id="chatbots" tabindex="0" onclick="toggleFlip(this)" onkeydown="if(event.key==='Enter')toggleFlip(this)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img class="project-image" src="images/chatbot_dental3.png" alt="Chatbots" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="project-image-placeholder">chatbots.png</div>
+            <div class="project-front-body">
+              <div class="project-top">
+                <span class="project-title">Chatbots Sectoriales</span>
+                <span class="project-badge badge-blue">IA aplicada</span>
+              </div>
+              <p class="project-desc-short">Suite de 3 chatbots con IA para dental, inmobiliaria y restaurante.</p>
+              <div class="project-tags">
+                <span class="tag">Python</span><span class="tag">Flask</span><span class="tag">Gemini</span>
+              </div>
+              <p class="flip-hint">Click para más info</p>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div>
+              <p class="flip-back-title">Chatbots Sectoriales</p>
+              <p class="flip-back-desc">Suite de 3 chatbots con IA desarrollados para sectores reales: clínica dental, agencia inmobiliaria y restaurante. Cada chatbot está entrenado con contexto específico del negocio y responde preguntas frecuentes, gestiona citas y recoge información de clientes. Backend en Flask con integración de la API de Gemini.</p>
+            </div>
+            <div class="flip-back-footer">
+              <div class="flip-back-tags">
+                <span class="tag">Python</span><span class="tag">Flask</span><span class="tag">Gemini</span><span class="tag">HTML/CSS</span>
+              </div>
+              <div class="flip-back-actions">
+                <button class="back-btn" onclick="event.stopPropagation();openLightbox(['images/chatbot_dental1.png','images/chatbot_dental2.png','images/chatbot_dental3.png','images/chatbot_inmo1.png','images/chatbot_inmo2.png','images/chatbot_inmo3.png','images/chatbot_rest1.png','images/chatbot_rest2.png','images/chatbot_rest3.png'],0)">Ver fotos</button>
+                <div style="position:relative;display:inline-block">
+                  <button class="back-btn" onclick="event.stopPropagation();this.nextElementSibling.style.display=this.nextElementSibling.style.display==='block'?'none':'block'">Ver vídeo ▾</button>
+                  <div style="display:none;position:absolute;bottom:110%;left:0;background:var(--white);border:0.5px solid var(--border-hover);border-radius:8px;padding:6px;min-width:160px;z-index:10;box-shadow:0 4px 12px rgba(0,0,0,0.1)">
+                    <button class="back-btn" style="width:100%;text-align:left;margin-bottom:4px" onclick="event.stopPropagation();openVideo('videos/chatbot_dental.mp4')">▶ Clínica dental</button>
+                    <button class="back-btn" style="width:100%;text-align:left;margin-bottom:4px" onclick="event.stopPropagation();openVideo('videos/chatbot_inmobiliaria.mp4')">▶ Inmobiliaria</button>
+                    <button class="back-btn" style="width:100%;text-align:left" onclick="event.stopPropagation();openVideo('videos/chatbot_restaurante.mp4')">▶ Restaurante</button>
+                  </div>
+                </div>
+                <button class="close-btn" onclick="event.stopPropagation();toggleFlip(this.closest('.flip-wrapper'))">← Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRIVIAPRO -->
+      <div class="flip-wrapper" id="triviapro" tabindex="0" onclick="toggleFlip(this)" onkeydown="if(event.key==='Enter')toggleFlip(this)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img class="project-image" src="images/trivia0.png" alt="TriviaPro" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="project-image-placeholder">triviapro.png</div>
+            <div class="project-front-body">
+              <div class="project-top">
+                <span class="project-title">TriviaPro</span>
+                <span class="project-badge badge-red">Juego web</span>
+              </div>
+              <p class="project-desc-short">Juego de trivia con +30.000 preguntas, niveles XP y múltiples modos.</p>
+              <div class="project-tags">
+                <span class="tag">HTML</span><span class="tag">JavaScript</span><span class="tag">SQLite</span>
+              </div>
+              <p class="flip-hint">Click para más info</p>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div>
+              <p class="flip-back-title">TriviaPro</p>
+              <p class="flip-back-desc">Juego de trivia web en español con más de 30.000 preguntas en base de datos SQLite. Sistema de niveles y XP, múltiples modos de juego (clásico, supervivencia, contrarreloj), avatares personalizables, racha de días y estadísticas por categoría. Diseño inspirado en Preguntados. Base de datos generada automáticamente con un pipeline propio usando la API de Gemini.</p>
+            </div>
+            <div class="flip-back-footer">
+              <div class="flip-back-tags">
+                <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">Python</span><span class="tag">SQLite</span>
+              </div>
+              <div class="flip-back-actions">
+                <button class="back-btn" onclick="event.stopPropagation();openLightbox(['images/trivia0.png','images/trivia1.png','images/trivia2.png','images/trivia3.png','images/trivia4.png','images/trivia5.png'],0)">Ver fotos</button>
+                <button class="back-btn" onclick="event.stopPropagation();openVideo('videos/triviapro.mp4')">Ver vídeo</button>
+                <button class="close-btn" onclick="event.stopPropagation();toggleFlip(this.closest('.flip-wrapper'))">← Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUNO -->
+      <div class="flip-wrapper" id="suno" tabindex="0" onclick="toggleFlip(this)" onkeydown="if(event.key==='Enter')toggleFlip(this)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img class="project-image" src="images/suno1.png" alt="Suno Pipeline" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="project-image-placeholder">suno_pipeline.png</div>
+            <div class="project-front-body">
+              <div class="project-top">
+                <span class="project-title">Suno Pipeline</span>
+                <span class="project-badge badge-green">Automatización</span>
+              </div>
+              <p class="project-desc-short">Pipeline end-to-end para generación automática de música con IA.</p>
+              <div class="project-tags">
+                <span class="tag">Python</span><span class="tag">Playwright</span><span class="tag">Flask</span>
+              </div>
+              <p class="flip-hint">Click para más info</p>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div>
+              <p class="flip-back-title">Suno Pipeline</p>
+              <p class="flip-back-desc">Pipeline end-to-end para generación y publicación automática de música con IA. Incluye dashboard local con control en tiempo real mediante Server-Sent Events, automatización de navegador con Playwright, gestión de cola de canciones y sistema de reintentos automáticos.</p>
+            </div>
+            <div class="flip-back-footer">
+              <div class="flip-back-tags">
+                <span class="tag">Python</span><span class="tag">Playwright</span><span class="tag">Flask</span><span class="tag">SSE</span><span class="tag">Suno.ai</span>
+              </div>
+              <div class="flip-back-actions">
+                <button class="back-btn" onclick="event.stopPropagation();openLightbox(['images/suno1.png','images/suno2.png','images/suno3.png','images/suno4.png','images/suno5.png','images/suno6.png'],0)">Ver fotos</button>
+                <button class="back-btn" onclick="event.stopPropagation();openVideo('videos/suno.mp4')">Ver vídeo</button>
+                <button class="close-btn" onclick="event.stopPropagation();toggleFlip(this.closest('.flip-wrapper'))">← Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOCANALYZER -->
+      <div class="flip-wrapper" id="docanalyzer" tabindex="0" onclick="toggleFlip(this)" onkeydown="if(event.key==='Enter')toggleFlip(this)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img class="project-image" src="images/doc1.png" alt="DocAnalyzer" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="project-image-placeholder">docanalyzer.png</div>
+            <div class="project-front-body">
+              <div class="project-top">
+                <span class="project-title">DocAnalyzer</span>
+                <span class="project-badge badge-blue">IA local</span>
+              </div>
+              <p class="project-desc-short">Análisis de documentos con IA 100% local. Sin APIs de pago.</p>
+              <div class="project-tags">
+                <span class="tag">Python</span><span class="tag">Ollama</span><span class="tag">LLM</span>
+              </div>
+              <p class="flip-hint">Click para más info</p>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div>
+              <p class="flip-back-title">DocAnalyzer</p>
+              <p class="flip-back-desc">Herramienta de análisis de documentos internos con IA completamente local. Extrae datos clave de PDFs y Excel, los estructura y genera resúmenes ejecutivos. Procesamiento 100% en local con Ollama — sin costes de API ni datos enviados a terceros.</p>
+            </div>
+            <div class="flip-back-footer">
+              <div class="flip-back-tags">
+                <span class="tag">Python</span><span class="tag">Ollama</span><span class="tag">PyMuPDF</span><span class="tag">Pandas</span><span class="tag">LLM local</span>
+              </div>
+              <div class="flip-back-actions">
+                <button class="back-btn" onclick="event.stopPropagation();openLightbox(['images/doc1.png','images/doc2.png','images/doc3.png','images/doc4.png','images/doc5.png','images/doc6.png','images/doc7.png'],0)">Ver fotos</button>
+                <button class="back-btn" onclick="event.stopPropagation();openVideo('videos/docanalyzer.mp4')">Ver vídeo</button>
+                <button class="close-btn" onclick="event.stopPropagation();toggleFlip(this.closest('.flip-wrapper'))">← Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPETETRACK -->
+      <div class="flip-wrapper" id="competetrack" tabindex="0" onclick="toggleFlip(this)" onkeydown="if(event.key==='Enter')toggleFlip(this)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img class="project-image" src="images/compete1.png" alt="CompeteTrack" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="project-image-placeholder">competetrack.png</div>
+            <div class="project-front-body">
+              <div class="project-top">
+                <span class="project-title">CompeteTrack</span>
+                <span class="project-badge badge-gray">Business intel.</span>
+              </div>
+              <p class="project-desc-short">Dashboard de monitorización de competidores en YouTube con IA.</p>
+              <div class="project-tags">
+                <span class="tag">Python</span><span class="tag">YouTube API</span><span class="tag">Ollama</span>
+              </div>
+              <p class="flip-hint">Click para más info</p>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div>
+              <p class="flip-back-title">CompeteTrack</p>
+              <p class="flip-back-desc">Dashboard de monitorización de competidores en YouTube con análisis por IA. Permite comparar canales, visualizar la evolución de suscriptores, analizar contenido con LLM y guardar el historial de datos en disco para seguimiento a largo plazo.</p>
+            </div>
+            <div class="flip-back-footer">
+              <div class="flip-back-tags">
+                <span class="tag">Python</span><span class="tag">YouTube API</span><span class="tag">Ollama</span><span class="tag">Groq</span><span class="tag">Pandas</span>
+              </div>
+              <div class="flip-back-actions">
+                <button class="back-btn" onclick="event.stopPropagation();openLightbox(['images/compete1.png','images/compete2.png','images/compete3.png','images/compete4.png','images/compete5.png'],0)">Ver fotos</button>
+                <button class="back-btn" onclick="event.stopPropagation();openVideo('videos/competetrack.mp4')">Ver vídeo</button>
+                <button class="close-btn" onclick="event.stopPropagation();toggleFlip(this.closest('.flip-wrapper'))">← Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ALPHATRACKER -->
+      <div class="flip-wrapper" id="alphatracker" tabindex="0" onclick="toggleFlip(this)" onkeydown="if(event.key==='Enter')toggleFlip(this)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img class="project-image" src="images/alphatracker1.png" alt="AlphaTracker" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="project-image-placeholder">alphatracker1.png</div>
+            <div class="project-front-body">
+              <div class="project-top">
+                <span class="project-title">AlphaTracker</span>
+                <span class="project-badge badge-blue">Plataforma web</span>
+              </div>
+              <p class="project-desc-short">Plataforma en tiempo real para la comunidad de PokéMMO. Votación de regiones y Pokémon en ciclos de 6h.</p>
+              <div class="project-tags">
+                <span class="tag">React</span><span class="tag">Firebase</span><span class="tag">Firestore</span>
+              </div>
+              <p class="flip-hint">Click para más info</p>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div>
+              <p class="flip-back-title">AlphaTracker</p>
+              <p class="flip-back-desc">Plataforma web en tiempo real para la comunidad de PokéMMO. Los jugadores votan regiones y Pokémon en ciclos de 6 horas, con sistema de reputación, logros, sanciones y notificaciones push.</p>
+            </div>
+            <div class="flip-back-footer">
+              <div class="flip-back-tags">
+                <span class="tag">React</span><span class="tag">Firebase</span><span class="tag">Firestore</span><span class="tag">Push notifications</span>
+              </div>
+              <div class="flip-back-actions">
+                <a class="back-btn primary" href="https://alphatracker-v2.web.app/" target="_blank">Ver en vivo →</a>
+                <button class="back-btn" onclick="event.stopPropagation();openLightbox(['images/alphatracker1.png','images/alphatracker2.png','images/alphatracker3.png','images/alphatracker4.png','images/alphatracker5.png','images/alphatracker6.png','images/alphatracker7.png','images/alphatracker8.png'],0)">Ver fotos</button>
+                <button class="back-btn" onclick="event.stopPropagation();openVideo('videos/alphatracker.mp4')">Ver vídeo</button>
+                <button class="close-btn" onclick="event.stopPropagation();toggleFlip(this.closest('.flip-wrapper'))">← Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- APPLICATION DEVIS -->
+      <div class="flip-wrapper" id="appdevis" tabindex="0" onclick="toggleFlip(this)" onkeydown="if(event.key==='Enter')toggleFlip(this)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img class="project-image" src="images/appdevis0.png" alt="Application Devis" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="project-image-placeholder">appdevis1.png</div>
+            <div class="project-front-body">
+              <div class="project-top">
+                <span class="project-title">Gestion Devis & Factures</span>
+                <span class="project-badge badge-gray">App escritorio</span>
+              </div>
+              <p class="project-desc-short">App de escritorio para gestión de presupuestos y facturas. Desarrollada para un cliente real en París.</p>
+              <div class="project-tags">
+                <span class="tag">Electron</span><span class="tag">Node.js</span><span class="tag">JavaScript</span>
+              </div>
+              <p class="flip-hint">Click para más info</p>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div>
+              <p class="flip-back-title">Gestion Devis & Factures</p>
+              <p class="flip-back-desc">Aplicación de escritorio Windows desarrollada para un cliente real de renovación de suelos en París. Gestión completa de presupuestos, facturas y clientes con datos persistentes en local. Instalable con un clic, sin dependencias externas.</p>
+            </div>
+            <div class="flip-back-footer">
+              <div class="flip-back-tags">
+                <span class="tag">Electron</span><span class="tag">Node.js</span><span class="tag">IPC</span><span class="tag">JSON</span><span class="tag">Windows</span>
+              </div>
+              <div class="flip-back-actions">
+                <button class="back-btn" onclick="event.stopPropagation();openLightbox(['images/appdevis0.png','images/appdevis1.png','images/appdevis2.png','images/appdevis3.png','images/appdevis4.png','images/appdevis5.png'],0)">Ver fotos</button>
+                <button class="back-btn" onclick="event.stopPropagation();openVideo('videos/device.mp4')">Ver vídeo</button>
+                <button class="close-btn" onclick="event.stopPropagation();toggleFlip(this.closest('.flip-wrapper'))">← Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENGLISHFLOW -->
+      <div class="flip-wrapper" id="englishflow" tabindex="0" onclick="toggleFlip(this)" onkeydown="if(event.key==='Enter')toggleFlip(this)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img class="project-image" src="images/englishflow1.png" alt="EnglishFlow" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="project-image-placeholder">englishflow1.png</div>
+            <div class="project-front-body">
+              <div class="project-top">
+                <span class="project-title">EnglishFlow</span>
+                <span class="project-badge badge-green">App educativa</span>
+              </div>
+              <p class="project-desc-short">Web app para aprender inglés con el método Vaughan. Niveles A1 a C1 con diálogos generados por IA.</p>
+              <div class="project-tags">
+                <span class="tag">HTML</span><span class="tag">JavaScript</span><span class="tag">Gemini</span>
+              </div>
+              <p class="flip-hint">Click para más info</p>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div>
+              <p class="flip-back-title">EnglishFlow</p>
+              <p class="flip-back-desc">Web app de aprendizaje de inglés basada en el método Vaughan. Currículo completo de A1 a C1, diálogos generados por IA, ejercicios interactivos y diseño oscuro propio. Sin backend — funciona 100% en el navegador.</p>
+            </div>
+            <div class="flip-back-footer">
+              <div class="flip-back-tags">
+                <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">Gemini</span>
+              </div>
+              <div class="flip-back-actions">
+                <button class="back-btn" onclick="event.stopPropagation();openLightbox(['images/englishflow1.png','images/englishflow2.png','images/englishflow3.png'],0)">Ver fotos</button>
+                <button class="back-btn" onclick="event.stopPropagation();openVideo('videos/englishflow_video.mp4')">Ver vídeo</button>
+                <button class="close-btn" onclick="event.stopPropagation();toggleFlip(this.closest('.flip-wrapper'))">← Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POKETOOLMMO -->
+      <div class="flip-wrapper" id="poketoolmmo" tabindex="0" onclick="toggleFlip(this)" onkeydown="if(event.key==='Enter')toggleFlip(this)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img class="project-image" style="object-fit: contain; background: var(--bg-secondary);" src="images/poketool1.png" alt="PokeToolMMO" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="project-image-placeholder">poketool1.png</div>
+            <div class="project-front-body">
+              <div class="project-top">
+                <span class="project-title">PokeToolMMO</span>
+                <span class="project-badge badge-red">App comunidad</span>
+              </div>
+              <p class="project-desc-short">Herramienta de escritorio para la comunidad de PokéMMO. Buscador, tracker de Alfas colaborativo y bilingüe.</p>
+              <div class="project-tags">
+                <span class="tag">Python</span><span class="tag">Tkinter</span><span class="tag">PokeAPI</span>
+              </div>
+              <p class="flip-hint">Click para más info</p>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div>
+              <p class="flip-back-title">PokeToolMMO</p>
+              <p class="flip-back-desc">App de escritorio para la comunidad de PokéMMO. Buscador de Pokémon con stats, debilidades, crianza y movimientos. Tracker colaborativo de Alfas con votación, cooldown y reseteo automático. Sin instalación, bilingüe (ES/EN) y con usuarios reales.</p>
+            </div>
+            <div class="flip-back-footer">
+              <div class="flip-back-tags">
+                <span class="tag">Python</span><span class="tag">Tkinter</span><span class="tag">PIL</span><span class="tag">PokeAPI</span><span class="tag">Threading</span>
+              </div>
+              <div class="flip-back-actions">
+                <button class="back-btn" onclick="event.stopPropagation();openLightbox(['images/poketool1.png','images/poketool2.png','images/poketool3.png','images/poketool4.png','images/poketool5.png'],0)">Ver fotos</button>
+                <button class="back-btn" onclick="event.stopPropagation();openVideo('videos/poketoolmmo.mp4')">Ver vídeo</button>
+                <button class="close-btn" onclick="event.stopPropagation();toggleFlip(this.closest('.flip-wrapper'))">← Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRADUCTOR DE VOZ -->
+      <div class="flip-wrapper" id="traductovoz" tabindex="0" onclick="toggleFlip(this)" onkeydown="if(event.key==='Enter')toggleFlip(this)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img class="project-image" src="images/traductor_voz1.png" alt="Traductor de Voz" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="project-image-placeholder">traductor_voz.png</div>
+            <div class="project-front-body">
+              <div class="project-top">
+                <span class="project-title">Traductor de Voz</span>
+                <span class="project-badge badge-blue">App móvil</span>
+              </div>
+              <p class="project-desc-short">App Flutter de traducción de voz en tiempo real. Hablas y traduce automáticamente.</p>
+              <div class="project-tags">
+                <span class="tag">Flutter</span><span class="tag">Dart</span><span class="tag">ML Kit</span>
+              </div>
+              <p class="flip-hint">Click para más info</p>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div>
+              <p class="flip-back-title">Traductor de Voz</p>
+              <p class="flip-back-desc">App móvil multiplataforma construida con Flutter. Captura voz en tiempo real con speech-to-text, traduce el texto automáticamente y lo reproduce con text-to-speech. Incluye OCR con ML Kit para traducir texto desde la cámara y soporte para múltiples idiomas.</p>
+            </div>
+            <div class="flip-back-footer">
+              <div class="flip-back-tags">
+                <span class="tag">Flutter</span><span class="tag">Dart</span><span class="tag">ML Kit</span><span class="tag">TTS</span><span class="tag">STT</span>
+              </div>
+              <div class="flip-back-actions">
+                <button class="back-btn" onclick="event.stopPropagation();openLightbox(['images/traductor_voz1.png','images/traductor_voz2.png','images/traductor_voz3.png','images/traductor_voz4.png'],0)">Ver fotos</button>
+                <a class="back-btn primary" href="https://voicetranslatorapp.netlify.app/" target="_blank">Ver en vivo →</a>
+                <button class="back-btn" onclick="event.stopPropagation();openVideo('videos/voicetranslator.mp4')">Ver vídeo</button>
+                <button class="close-btn" onclick="event.stopPropagation();toggleFlip(this.closest('.flip-wrapper'))">← Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI BOOK GENERATOR -->
+      <div class="flip-wrapper" id="librogenerator" tabindex="0" onclick="toggleFlip(this)" onkeydown="if(event.key==='Enter')toggleFlip(this)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img class="project-image" src="images/libro1.png" alt="AI Book Generator" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="project-image-placeholder">librohumo.png</div>
+            <div class="project-front-body">
+              <div class="project-top">
+                <span class="project-title">AI Book Generator</span>
+                <span class="project-badge badge-blue">Automatización</span>
+              </div>
+              <p class="project-desc-short">Pipeline que genera libros completos de forma autónoma con IA. Arquitectura modular en 3 fases.</p>
+              <div class="project-tags">
+                <span class="tag">Python</span><span class="tag">Gemini</span><span class="tag">PDF</span>
+              </div>
+              <p class="flip-hint">Click para más info</p>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div>
+              <p class="flip-back-title">AI Book Generator</p>
+              <p class="flip-back-desc">Pipeline autónomo que genera libros completos con IA. Arquitectura modular en 3 fases: arquitecto (estructura), redactor (contenido capítulo a capítulo) y compilador (PDF final). Rotación automática de API keys, reanudación si se interrumpe y README profesional. Libro de ejemplo publicado.</p>
+            </div>
+            <div class="flip-back-footer">
+              <div class="flip-back-tags">
+                <span class="tag">Python</span><span class="tag">Gemini</span><span class="tag">Markdown</span><span class="tag">PDF</span>
+              </div>
+              <div class="flip-back-actions">
+                <a class="back-btn primary" href="https://github.com/csanchezarias" target="_blank">Ver código →</a>
+                <button class="back-btn" onclick="event.stopPropagation();openLightbox(['images/libro1.png','images/libro2.png','images/libro3.png','images/libro4.png'],0)">Ver fotos</button>
+                <button class="back-btn" onclick="event.stopPropagation();openVideo('videos/libro.mp4')">Ver vídeo</button>
+                <button class="close-btn" onclick="event.stopPropagation();toggleFlip(this.closest('.flip-wrapper'))">← Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AGENTE AUTONOMO -->
+      <div class="flip-wrapper" id="agenteautonomo" tabindex="0" onclick="toggleFlip(this)" onkeydown="if(event.key==='Enter')toggleFlip(this)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img class="project-image" src="images/agente3.png" alt="Agente Autónomo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="project-image-placeholder">agente.png</div>
+            <div class="project-front-body">
+              <div class="project-top">
+                <span class="project-title">Agente Autónomo</span>
+                <span class="project-badge badge-blue">IA aplicada</span>
+              </div>
+              <p class="project-desc-short">Agente de desarrollo autónomo con interfaz web. Crea proyectos completos desde una instrucción.</p>
+              <div class="project-tags">
+                <span class="tag">Python</span><span class="tag">Flask</span><span class="tag">Gemini</span>
+              </div>
+              <p class="flip-hint">Click para más info</p>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div>
+              <p class="flip-back-title">Agente Autónomo</p>
+              <p class="flip-back-desc">Agente de desarrollo autónomo con panel web local. Genera proyectos completos en Python, Flask, React o FastAPI a partir de una instrucción en lenguaje natural. Incluye logs en tiempo real via SSE, memoria SQLite, autocorrección de errores en hasta 6 intentos y soporte multi-API (Gemini, Groq).</p>
+            </div>
+            <div class="flip-back-footer">
+              <div class="flip-back-tags">
+                <span class="tag">Python</span><span class="tag">Flask</span><span class="tag">SSE</span><span class="tag">SQLite</span><span class="tag">Gemini</span>
+              </div>
+              <div class="flip-back-actions">
+                <a class="back-btn primary" href="https://github.com/csanchezarias" target="_blank">Ver código →</a>
+                <button class="back-btn" onclick="event.stopPropagation();openLightbox(['images/agente1.png','images/agente2.png','images/agente3.png'],0)">Ver fotos</button>
+                <button class="back-btn" onclick="event.stopPropagation();openVideo('videos/agente_autonomo.mp4')">Ver vídeo</button>
+                <button class="close-btn" onclick="event.stopPropagation();toggleFlip(this.closest('.flip-wrapper'))">← Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OCR AXIOM -->
+      <div class="flip-wrapper" id="ocraxiom" tabindex="0" onclick="toggleFlip(this)" onkeydown="if(event.key==='Enter')toggleFlip(this)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img class="project-image" src="images/ocr_axiom1.png" alt="OCR Axiom" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="project-image-placeholder">ocr_axiom.png</div>
+            <div class="project-front-body">
+              <div class="project-top">
+                <span class="project-title">OCR Axiom Tracker</span>
+                <span class="project-badge badge-gray">Automatización</span>
+              </div>
+              <p class="project-desc-short">Captura métricas de trading en tiempo real via OCR. Genera datasets para modelos de ML.</p>
+              <div class="project-tags">
+                <span class="tag">Python</span><span class="tag">OCR</span><span class="tag">NumPy</span>
+              </div>
+              <p class="flip-hint">Click para más info</p>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div>
+              <p class="flip-back-title">OCR Axiom Tracker</p>
+              <p class="flip-back-desc">Sistema de captura de datos en tiempo real sobre plataformas de trading mediante OCR. Lee métricas de pantalla (marketcap, liquidez, volumen, holders) a 10 capturas por segundo, calcula indicadores técnicos (RSI, SMA, momentum) y genera datasets estructurados para entrenar modelos de reinforcement learning.</p>
+            </div>
+            <div class="flip-back-footer">
+              <div class="flip-back-tags">
+                <span class="tag">Python</span><span class="tag">Tesseract</span><span class="tag">PIL</span><span class="tag">NumPy</span><span class="tag">Threading</span>
+              </div>
+              <div class="flip-back-actions">
+                <a class="back-btn primary" href="https://github.com/csanchezarias" target="_blank">Ver código →</a>
+                <button class="back-btn" onclick="event.stopPropagation();openLightbox(['images/ocr_axiom1.png','images/ocr_axiom2.png','images/ocr_axiom3.png','images/ocr_axiom4.png','images/ocr_axiom5.png','images/ocr_axiom6.png','images/ocr_axiom7.png'],0)">Ver fotos</button>
+                <button class="back-btn" onclick="event.stopPropagation();openVideo('videos/ocr_axiom.mp4')">Ver vídeo</button>
+                <button class="close-btn" onclick="event.stopPropagation();toggleFlip(this.closest('.flip-wrapper'))">← Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ALCHEMY MERGE -->
+      <div class="flip-wrapper" id="alchemymerge" tabindex="0" onclick="toggleFlip(this)" onkeydown="if(event.key==='Enter')toggleFlip(this)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img class="project-image" src="images/alchemy1.png" alt="Alchemy Merge" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="project-image-placeholder">alchemy_merge.png</div>
+            <div class="project-front-body">
+              <div class="project-top">
+                <span class="project-title">Alchemy Merge</span>
+                <span class="project-badge badge-red">Juego móvil</span>
+              </div>
+              <p class="project-desc-short">Juego de alquimia publicado en Google Play Store. Más de 50 descargas.</p>
+              <div class="project-tags">
+                <span class="tag">Godot</span><span class="tag">GDScript</span><span class="tag">Android</span>
+              </div>
+              <p class="flip-hint">Click para más info</p>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div>
+              <p class="flip-back-title">Alchemy Merge</p>
+              <p class="flip-back-desc">Juego móvil de alquimia y combinación publicado en Google Play Store. Sistema de recetas y reliquias, tienda in-game, museos desbloqueables y arte original. Desarrollado completamente en Godot y disponible para descarga en Android.</p>
+            </div>
+            <div class="flip-back-footer">
+              <div class="flip-back-tags">
+                <span class="tag">Godot</span><span class="tag">GDScript</span><span class="tag">Android</span><span class="tag">Google Play</span>
+              </div>
+              <div class="flip-back-actions">
+                <a class="back-btn primary" href="https://play.google.com/store/apps/details?id=com.mayastudios.alchemymerge" target="_blank">Ver en Play Store →</a>
+                <button class="back-btn" onclick="event.stopPropagation();openLightbox(['images/alchemy1.png','images/alchemy2.png','images/alchemy3.png','images/alchemy4.png','images/alchemy5.png','images/alchemy6.png','images/alchemy7.png'],0)">Ver fotos</button>
+                <button class="back-btn" onclick="event.stopPropagation();openVideo('videos/alchemyfast.mp4')">Ver vídeo rápido</button>
+                <button class="back-btn" onclick="event.stopPropagation();openVideo('videos/alchemy.mp4')">Ver vídeo mecánica</button>
+                <button class="close-btn" onclick="event.stopPropagation();toggleFlip(this.closest('.flip-wrapper'))">← Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUIZSHOW -->
+      <div class="flip-wrapper" id="quizshow" tabindex="0" onclick="toggleFlip(this)" onkeydown="if(event.key==='Enter')toggleFlip(this)">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img class="project-image" src="images/quizshow1.png" alt="QuizShow" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="project-image-placeholder">quizshow.png</div>
+            <div class="project-front-body">
+              <div class="project-top">
+                <span class="project-title">QuizShow</span>
+                <span class="project-badge badge-red">Juego — WIP</span>
+              </div>
+              <p class="project-desc-short">Juego de trivial multijugador con animaciones y efectos visuales. En desarrollo.</p>
+              <div class="project-tags">
+                <span class="tag">Godot</span><span class="tag">GDScript</span>
+              </div>
+              <p class="flip-hint">Click para más info</p>
+            </div>
+          </div>
+          <div class="flip-back">
+            <div>
+              <p class="flip-back-title">QuizShow</p>
+              <p class="flip-back-desc">Juego de trivial con estética de programa de televisión. Animaciones de entrada, efectos visuales por respuesta, múltiples categorías y sistema de puntuación. Actualmente en desarrollo activo.</p>
+            </div>
+            <div class="flip-back-footer">
+              <div class="flip-back-tags">
+                <span class="tag">Godot</span><span class="tag">GDScript</span><span class="tag">Animaciones</span>
+              </div>
+              <div class="flip-back-actions">
+                <button class="back-btn" onclick="event.stopPropagation();openLightbox(['images/quizshow1.png','images/quizshow2.png','images/quizshow3.png','images/quizshow4.png','images/quizshow5.png'],0)">Ver fotos</button>
+                <button class="back-btn" onclick="event.stopPropagation();openVideo('videos/quizshow.mp4')">Ver vídeo</button>
+                <button class="close-btn" onclick="event.stopPropagation();toggleFlip(this.closest('.flip-wrapper'))">← Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section" id="skills">
+    <p class="section-label">Skills &amp; Stack</p>
+    <div class="skills-grid">
+      <div class="skill-block"><p class="skill-category">Lenguajes</p><div class="skill-list"><span class="skill-item">Python</span><span class="skill-item">JavaScript</span><span class="skill-item">TypeScript</span><span class="skill-item">Dart (Flutter)</span></div></div>
+      <div class="skill-block"><p class="skill-category">Automatización</p><div class="skill-list"><span class="skill-item">Playwright</span><span class="skill-item">Selenium</span><span class="skill-item">Web scraping</span></div></div>
+      <div class="skill-block"><p class="skill-category">IA &amp; ML</p><div class="skill-list"><span class="skill-item">Ollama (LLM local)</span><span class="skill-item">Gemini / Groq</span><span class="skill-item">Prompt engineering</span></div></div>
+      <div class="skill-block"><p class="skill-category">Backend</p><div class="skill-list"><span class="skill-item">Flask</span><span class="skill-item">Next.js</span><span class="skill-item">REST APIs</span></div></div>
+      <div class="skill-block"><p class="skill-category">Apps</p><div class="skill-list"><span class="skill-item">Flutter</span><span class="skill-item">Electron</span><span class="skill-item">Tkinter</span></div></div>
+      <div class="skill-block"><p class="skill-category">Datos</p><div class="skill-list"><span class="skill-item">Pandas</span><span class="skill-item">SQLite / MySQL</span><span class="skill-item">PDF / Excel</span></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <p class="section-label">Sobre mí</p>
+    <div class="about-card">
+      <p>Desarrollador enfocado en automatización e inteligencia artificial práctica. Me especializo en construir pipelines que conectan herramientas de IA con flujos de trabajo reales — desde generación de contenido hasta análisis de documentos empresariales.</p>
+      <p>Trabajo con Python, Flutter, Next.js y un stack de IA local. Basado en Sevilla, disponible para proyectos freelance y posiciones full-time.</p>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <p class="section-label">Contacto</p>
+    <div class="contact-row">
+      <a class="contact-btn primary" href="mailto:csanchezarias86@gmail.com">✉ Enviar email</a>
+      <a class="contact-btn" href="https://github.com/csanchezarias" target="_blank" rel="noopener">⌥ GitHub</a>
+      <a class="contact-btn" href="https://linkedin.com/in/carlos-sanchez-arias" target="_blank" rel="noopener">in LinkedIn</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Sevilla, España · csanchezarias86@gmail.com</p>
+  </footer>
+  
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox(event)">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-fullscreen" onclick="event.stopPropagation();toggleFullscreen()" title="Pantalla completa">⛶</button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="">
+    <button class="lightbox-prev" onclick="event.stopPropagation();lightboxNav(-1)">‹</button>
+    <button class="lightbox-next" onclick="event.stopPropagation();lightboxNav(1)">›</button>
+    <p class="lightbox-counter" id="lightbox-counter"></p>
+  </div>
+</div>
+
+</main>
+
+<script>
+function toggleFlip(el) {
+  el.classList.toggle('flipped');
+}
+
+function openVideo(src) {
+  const lb = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
+  img.style.display = 'none';
+  let video = document.getElementById('lightbox-video');
+  if (!video) {
+    video = document.createElement('video');
+    video.id = 'lightbox-video';
+    video.controls = true;
+    video.style.cssText = 'max-width:90vw;max-height:80vh;border-radius:8px;display:block;';
+    img.parentNode.insertBefore(video, img.nextSibling);
+  }
+  video.src = src;
+  video.autoplay = true;
+  video.muted = false;
+  video.play();
+  video.style.display = 'block';
+  document.getElementById('lightbox-counter').textContent = '';
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+const links = document.querySelectorAll('.sidebar-link[href^="#"]');
+const targets = document.querySelectorAll('.section, .flip-wrapper[id]');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`.sidebar-link[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { threshold: 0.4 });
+targets.forEach(t => { if(t.id) obs.observe(t); });
+
+// LIGHTBOX
+let lbImages = [];
+let lbIndex = 0;
+
+function openLightbox(images, index) {
+  lbImages = images;
+  lbIndex = index;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox(e) {
+  if (e && e.target !== document.getElementById('lightbox') && !e.target.classList.contains('lightbox-close')) return;
+  const video = document.getElementById('lightbox-video');
+  if (video) { video.pause(); video.style.display = 'none'; }
+  document.getElementById('lightbox-img').style.display = 'block';
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function toggleFullscreen() {
+  const inner = document.querySelector('.lightbox-inner');
+  if (!document.fullscreenElement) {
+    inner.requestFullscreen?.();
+  } else {
+    document.exitFullscreen?.();
+  }
+}
+
+function lightboxNav(dir) {
+  lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
+  updateLightbox();
+}
+
+function updateLightbox() {
+  document.getElementById('lightbox-img').src = lbImages[lbIndex];
+  document.getElementById('lightbox-counter').textContent = (lbIndex + 1) + ' / ' + lbImages.length;
+}
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'ArrowRight') lightboxNav(1);
+  if (e.key === 'ArrowLeft') lightboxNav(-1);
+  if (e.key === 'Escape') closeLightbox({target: document.getElementById('lightbox')});
+});
+
+</script>
+
+</body>
+</html>
